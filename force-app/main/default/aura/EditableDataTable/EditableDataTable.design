@@ -1,0 +1,33 @@
+<design:component label="Editable List">
+  <design:attribute
+    name="title"
+    label="Title"
+    required="false"
+    default="Result"
+    description="Title displayed on the component header. A number of records displayed follows."
+  />
+  <design:attribute
+    name="objectName"
+    label="Taget Object"
+    required="true"
+    default="Opportunity"
+    description="API name for a target object. Add '__c' for a custom object. i.e. Account, Opportunity, CustomObject__c, etc"
+  />
+  <design:attribute
+    name="fieldNames"
+    label="Column Fields"
+    required="true"
+    default="Name, Type, StageName, Amount, CloseDate, AccountId"
+    description="API names for fields on Target Object. Use ',' for multiple fields. Add '__c' for a custom fields."
+  />
+  <design:attribute
+    name="columnWidths"
+    label="Minimum Width for Each Column"
+    required="true"
+    default="auto, auto, auto, auto, auto, auto, auto"
+    description="Minimum Width for Each Column"
+  />
+  <design:attribute name="height" label="Table Height" required="true" default="500" description="Height of Data Table" />
+  <design:attribute name="rows" label="Rows" required="true" default="20" description="Number of Rows to display (Maximum is 200)" />
+  <design:attribute name="order" label="Order" required="true" default="2" description="Specifies the order of components to process the results" />
+</design:component>

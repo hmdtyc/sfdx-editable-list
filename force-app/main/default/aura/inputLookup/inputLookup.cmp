@@ -1,0 +1,66 @@
+<aura:component controller="EditableDataTableController">
+  <aura:attribute access="public" type="String" name="referenceObjectName" />
+  <aura:attribute access="public" type="String" name="referenceRelationshipName" />
+  <aura:attribute access="public" type="String" name="referenceNameField" />
+  <aura:attribute access="public" type="String" name="id" />
+  <aura:attribute access="public" type="String" name="name" />
+
+  <aura:attribute access="private" type="String" name="iconName" default="standard:relationship" />
+  <aura:attribute access="private" type="Object" name="timer" />
+  <aura:attribute access="private" type="Object" name="iconDefinition" />
+  <aura:attribute access="private" type="Boolean" name="hasFocus" default="false" />
+  <aura:attribute access="private" type="String" name="searchWord" default="" />
+  <aura:attribute access="private" type="Object[]" name="searchResult" />
+  <aura:attribute access="private" type="String" name="previousId" />
+
+  <aura:handler name="init" value="{!this}" action="{!c.init}" />
+  <aura:handler name="change" value="{!v.id}" action="{!c.idChange}" />
+  <aura:registerEvent name="inputChangeEvent" type="c:inputChange" />
+
+  <div>
+    <c:getIconUrl aura:id="geticonurl" objectname="{!v.referenceObjectName}" onobjectinforetrieved="{!c.addIconDefinition}" />
+    <aura:if isTrue="{! and(!empty(v.id), !empty(v.name))}">
+      <div class="output">
+        <span class="icon" style="{!'background-color:#' + v.iconDefinition.color + ';'}">
+          <img src="{!v.iconDefinition.iconUrl}" />
+        </span>
+        <span class="name">
+          <ui:outputText value="{!v.name}" />
+        </span>
+        <span class="deleteIcon" onclick="{!c.delete}"></span>
+      </div>
+    </aura:if>
+    <aura:if isTrue="{! and(empty(v.id), empty(v.name))}">
+      <div class="input">
+        <lightning:input
+          aura:id="input"
+          type="text"
+          onchange="{!c.inputChange}"
+          variant="label-hidden"
+          onblur="{!c.blur}"
+          onfocus="{!c.focus}"
+          class="input-box"
+        />
+        <aura:if isTrue="{!v.hasFocus}">
+          <div class="input-guide">
+            <ul>
+              <aura:if isTrue="{!v.searchWord.length lt 2}">
+                <li><span class="icon"><lightning:icon iconName="utility:search" size="x-small"/></span>Type at least 2 letters</li>
+              </aura:if>
+              <aura:if isTrue="{!v.searchWord.length ge 2}">
+                <li><span class="icon"><lightning:icon iconName="utility:search" size="x-small"/></span>{!v.searchWord} in {!v.referenceObjectName}</li>
+                <aura:iteration items="{!v.searchResult}" var="item">
+                  <li data-id="{!item.id}" data-name="{!item.name}" onclick="{!c.select}">
+                    <span class="icon" style="{!'background-color:#' + v.iconDefinition.color + ';'}">
+                      <img src="{!v.iconDefinition.iconUrl}" />
+                    </span>
+                    {!item.name}</li>
+                </aura:iteration>
+              </aura:if>
+            </ul>
+          </div>
+        </aura:if>
+      </div>
+    </aura:if>
+  </div>
+</aura:component>

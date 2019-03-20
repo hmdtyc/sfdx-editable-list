@@ -1,0 +1,30 @@
+<aura:component>
+  <aura:attribute access="public" type="String" name="objectName" />
+  <aura:attribute access="public" type="String" name="fieldName" default="" />
+  <aura:attribute access="public" type="String" name="type" />
+  <aura:attribute access="public" type="String" name="value" />
+  <aura:attribute access="public" type="String" name="recordTypeId" default="" />
+
+  <aura:attribute access="private" type="String" name="previousValue" />
+  <aura:attribute access="private" type="Object[]" name="options" default="[]" />
+
+  <aura:handler name="init" value="{!this}" action="{!c.init}" />
+  <aura:handler name="change" value="{!v.value}" action="{!c.valueChange}" />
+  <aura:registerEvent name="inputChangeEvent" type="c:inputChange" />
+
+  <div>
+    <aura:if isTrue="{! and(v.recordTypeId != '', v.objectName != '')}">
+      <c:getPicklistValuesByRecordType aura:id="gplvbrt" nam="{!v.objectName}" rid="{!v.recordTypeId}" onpicklistvaluesretrieved="{!c.setValues}" />
+    </aura:if>
+    <aura:if isTrue="{!v.options.length > 0}">
+      <div class="pickselect">
+        <ui:inputSelect multiple="false" value="{!v.value}">
+          <aura:iteration items="{!v.options}" var="item">
+            <ui:inputSelectOption text="{!item.value}" label="{!item.label}" />
+          </aura:iteration>
+        </ui:inputSelect>
+      </div>
+    </aura:if>
+  </div>
+
+</aura:component>

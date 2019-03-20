@@ -1,0 +1,81 @@
+.THIS {
+  width: 100%;
+  position: relative;
+}
+.THIS .output {
+  display: block;
+  position: relative;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(221, 219, 218);
+  border-radius: 0.25rem;
+  width: 100%;
+  transition: border 0.1s linear, background-color 0.1s linear;
+  padding: 0 0.25rem 0 0.25rem;
+  line-height: 1.875rem;
+  min-height: calc(1.875rem + (1px * 2));
+  z-index: 20;
+}
+.THIS .icon {
+  margin: auto 0;
+  display: inline-block;
+  border-radius: 0.25rem;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  vertical-align: middle;
+}
+.THIS .output .name {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100% - 46px);
+}
+.THIS .output .deleteIcon {
+  margin-left: auto;
+}
+.THIS .output .deleteIcon:after {
+  content: "\2715";
+}
+.THIS .output .deleteIcon:hover {
+  cursor: pointer;
+}
+.THIS .input {
+  display: block;
+  position: relative;
+}
+.THIS .input-box {
+  z-index: 48;
+}
+.THIS .input.hide {
+  display: none;
+}
+.THIS .input-guide {
+  position: absolute;
+  background-color: white;
+  border: 1px solid rgb(221, 219, 218);
+  width: 100%;
+  padding-top: 0.25rem;
+  z-index: 49;
+}
+.THIS .input-guide li {
+  line-height: 1;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  padding: 0 0.25rem;
+  z-index: 49;
+}
+.THIS .input-guide li:not(:first-child):hover {
+  background-color: #f3f2f2;
+}
+.THIS .input-guide .icon {
+  margin: 0 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

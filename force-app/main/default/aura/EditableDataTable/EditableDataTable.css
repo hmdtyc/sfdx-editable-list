@@ -1,0 +1,103 @@
+.THIS .is-hidden {
+  display: none;
+}
+.THIS .slds-modal article {
+  background: white;
+  border-radius: 5px;
+  overflow: hidden;
+  padding: 16px;
+}
+.THIS .slds-card__body {
+  position: relative;
+}
+.THIS .message {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: calc(50% + 1rem);
+  left: 50%;
+  width: 100%;
+  text-align: center;
+}
+.THIS .message .slds-icon {
+  fill: rgba(194, 233, 255, 0.4);
+}
+.THIS .message .message-body {
+  position: absolute;
+  top: 16px;
+  width: 100%;
+}
+.THIS .slds-scrollable_y {
+  min-height: 100%;
+}
+.THIS .slds-button {
+  white-space: nowrap;
+}
+.THIS .table-wrapper {
+  overflow: auto;
+  max-width: 100%;
+}
+.THIS .datalist > thead > tr > th {
+  height: 1.75rem;
+  padding: 0.5rem 0 0.5rem 0.25rem;
+  position: sticky;
+  top: 0px;
+  background: rgb(250, 250, 249);
+  z-index: 50;
+  border-bottom: 1px solid rgb(221, 219, 218);
+}
+.THIS .datalist > thead > tr > th:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  border-bottom: 1px solid rgb(221, 219, 218);
+}
+.THIS .datalist > tbody > tr {
+  vertical-align: top;
+}
+.THIS .datalist > tbody > tr:hover {
+  background-color: rgb(243, 242, 242);
+}
+.THIS .datalist > tbody > tr:not(:last-child) {
+  margin-bottom: 0.1rem;
+}
+.THIS .datalist > tbody > tr > td > div {
+  padding: 0.25rem;
+  border: 1px solid transparent;
+}
+.THIS .datepicker {
+  position: unset !important;
+}
+.THIS .datepicker lightning-datepicker .slds-dropdown-trigger,
+.THIS .datepicker lightning-datepicker .slds-input-has-icon,
+.THIS .datepicker lightning-datetimepicker .slds-form_compound .slds-form-element__control,
+.THIS .datepicker lightning-datetimepicker .slds-form-element {
+  position: unset !important;
+}
+.THIS .datepicker lightning-datepicker .slds-input-has-icon .slds-input__icon {
+  position: relative !important;
+  top: -1.6rem !important;
+  left: calc(100% - 1.25rem) !important;
+}
+.THIS .datalist tr > td > div.changed {
+  background: rgb(250, 255, 189);
+  border: 1px solid #f9f9a1;
+}
+.THIS .datalist tr > td > div.error {
+  background: #f5a29f;
+  border: 1px solid #f9f9a1;
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+}
+.THIS .datalist tr > td > div.error > *:first-child {
+  width: calc(100% - 15px);
+}
+.THIS .spinner-container {
+  position: absolute;
+  top: 1.75rem;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 1.75rem + 3px);
+}

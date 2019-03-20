@@ -1,0 +1,132 @@
+<aura:component
+  implements="flexipage:availableForAllPageTypes,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+  access="global"
+  controller="EditableDataTableController">
+  <!-- Global Attributes -->
+  <aura:attribute access="global" type="String" name="title" />
+  <aura:attribute access="global" type="String" name="objectName" />
+  <aura:attribute access="global" type="String" name="fieldNames" default="" />
+  <aura:attribute access="global" type="Integer" name="height" default="500" />
+  <aura:attribute access="global" type="String" name="columnWidths" default="" />
+  <aura:attribute access="global" type="Integer" name="rows" default="20" />
+  <aura:attribute access="global" type="Integer" name="order" default="" />
+
+  <!-- Public Attributes -->
+  <aura:attribute access="public" type="String" name="recordId" default="" />
+  <aura:attribute access="public" type="String[]" name="recordIds" default="[]" />
+  <aura:attribute access="public" type="String" name="errorMessage" default="" />
+
+  <!-- Private Attributes -->
+  <aura:attribute access="private" type="Object[]" name="fields" default="[]" />
+  <aura:attribute access="private" type="Object[]" name="data" default="[]" />
+  <aura:attribute access="private" type="Object[]" name="displayData" default="[]" />
+  <aura:attribute access="private" type="Object[]" name="recordsToSave" default="[]" />
+  <aura:attribute access="private" type="Integer[]" name="indexesToSave" default="[]" />
+  <aura:attribute access="private" type="String" name="iconName" default="custom:custom57" />
+  <aura:attribute access="private" type="String" name="messageWhenNoResult" default="No Records Found" />
+  <aura:attribute access="private" type="Object" name="timer" />
+  <aura:attribute access="private" type="Boolean" name="isLoading" default="false" />
+
+  <!-- Event Handler -->
+  <aura:handler event="RHG:SearchResult" action="{!c.onSearchBoxEvent}" />
+  <aura:handler event="c:inputChange" name="inputChangeEvent" action="{!c.inputChange}" />
+  <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+
+  <!-- User Interface -->
+  <div style="position:relative;" aura:id="component">
+    <lightning:card iconName="{!v.iconName}" title="{!v.title + ' (' + v.displayData.length + ')'}">
+      <aura:set attribute="actions">
+        <lightning:button iconName="utility:edit_form" label="Create" variant="brand" onclick="{!c.create}" class="slds-m-right_medium" />
+        <lightning:button iconName="utility:save" label="Save" variant="brand" onclick="{!c.save}" class="slds-m-right_medium" />
+      </aura:set>
+
+      <aura:if isTrue="{!!empty(v.errorMessage)}">
+        <ui:message title="Error" severity="error" closable="false">{!v.errorMessage}</ui:message>
+      </aura:if>
+
+      <div class="slds-p-horizontal_small table-wrapper" style="{!'min-height:120px;max-height:'+v.height+'px;'}">
+        <aura:if isTrue="{!v.isLoading}">
+          <div class="spinner-container"><lightning:spinner size="large" variant="brand"/></div>
+        </aura:if>
+
+        <table class="datalist">
+          <thead>
+            <tr>
+              <th style="width:40px;max-width:40px;"></th>
+              <th style="width:40px;max-width:40px;"></th>
+              <aura:iteration items="{!v.fields}" var="item">
+                <th class="slds-text-title_caps" style="{!'min-width:'+ item.width + 'px;'}">{!item.label}</th>
+              </aura:iteration>
+            </tr>
+          </thead>
+          <aura:if isTrue="{!v.data.length > 0}">
+            <tbody>
+              <aura:iteration items="{!v.displayData}" var="record" indexVar="index">
+                <tr data-index="{!index}">
+                  <td>
+                    <div><lightning:buttonIcon iconName="utility:redo" variant="border-filled" name="{!index}" onclick="{!c.resetRecord}"/></div>
+                  </td>
+                  <td>
+                    <div><lightning:buttonIcon iconName="utility:search" variant="border-filled" name="{!index}" onclick="{!c.viewRecord}"/></div>
+                  </td>
+                  <aura:iteration items="{!record}" var="field">
+                    <td
+                      ><div class="{! !empty(field.errors) ? 'error' : field.changed ? 'changed' : ''}">
+                        <aura:if isTrue="{! field.type == 'picklist' }">
+                          <c:inputPicklist
+                            objectName="{!v.objectName}"
+                            fieldName="{!field.name}"
+                            type="{!field.type}"
+                            value="{!field.value}"
+                            recordTypeId="{!field.recordtypeid}"
+                          />
+                        </aura:if>
+                        <aura:if isTrue="{! field.type == 'reference'}">
+                          <c:inputLookup
+                            referenceObjectName="{!field.referenceObjectName}"
+                            referenceRelationshipName="{!field.referenceRelationshipName}"
+                            referenceNameField="{!field.referenceNameField}"
+                            name="{!field.referenceDispalyValue}"
+                            id="{!field.value}"
+                          />
+                        </aura:if>
+                        <aura:if isTrue="{! field.type == 'textarea'}">
+                          <lightning:textarea name="{!index}" label="" variant="label-hidden" value="{!field.value}" rows="2" onchange="{!c.inputChange}" />
+                        </aura:if>
+                        <aura:if isTrue="{! !(field.type == 'picklist' || field.type == 'reference' || field.type == 'textarea') }">
+                          <lightning:input
+                            name="{!index}"
+                            value="{!field.value}"
+                            variant="label-hidden"
+                            class="{! field.type == 'datetime' || field.type == 'date' ? 'datepicker' : ''}"
+                            label="{!field.label}"
+                            type="{!field.type}"
+                            checked="{!field.value}"
+                            formatter="{!field.formatter}"
+                            onchange="{!c.inputChange}"
+                          />
+                        </aura:if>
+                        <aura:if isTrue="{! !empty(field.errors)}">
+                          <lightning:helptext content="{!field.errors}" />
+                        </aura:if>
+                      </div>
+                    </td>
+                  </aura:iteration>
+                </tr>
+              </aura:iteration>
+            </tbody>
+          </aura:if>
+        </table>
+      </div>
+
+      <!-- Empty Message -->
+      <aura:if isTrue="{!and(empty(v.recordIds), !empty(v.messageWhenNoResult))}">
+        <div class="message">
+          <lightning:icon iconName="utility:warning" size="large" alternativeText="No Record Found" />
+          <div class="slds-text-body_regular  message-body">{!v.messageWhenNoResult}</div>
+        </div>
+      </aura:if>
+      <!-- /Empty Message -->
+    </lightning:card>
+  </div>
+</aura:component>

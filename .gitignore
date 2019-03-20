@@ -1,0 +1,4 @@
+uncrustify.cfg
+.vscode/*
+.vscode/settings.json
+.sfdx/*
