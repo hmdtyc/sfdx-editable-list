@@ -140,7 +140,7 @@
     return new Promise(function(resolve, reject) {
       action.setCallback(this, function(response) {
         const ret = response.getReturnValue();
-        if (response.getState() === "SUCCESS") resolve(ret);
+        if (response.getState() === "SUCCESS") ret.hasError ? reject(ret.message) : resolve(ret);
         else if (response.getState() === "ERROR") reject("errorr");
       });
       $A.enqueueAction(action);
