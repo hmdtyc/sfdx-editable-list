@@ -53,10 +53,10 @@
         <table class="datalist">
           <thead>
             <tr>
-              <th style="width:40px;max-width:40px;"></th>
-              <th style="width:40px;max-width:40px;"></th>
+                <th style="width:40px;max-width:40px;"><div class="th-inner"></div></th>
+                <th style="width:40px;max-width:40px;"><div class="th-inner"></div></th>
               <aura:iteration items="{!v.fields}" var="item">
-                <th class="slds-text-title_caps" style="{!'min-width:'+ item.width + 'px;'}">{!item.label}</th>
+                  <th class="slds-text-title_caps" style="{!'min-width:'+ item.width + 'px;'}"><div class="th-inner">{!item.label}</div></th>
               </aura:iteration>
             </tr>
           </thead>
