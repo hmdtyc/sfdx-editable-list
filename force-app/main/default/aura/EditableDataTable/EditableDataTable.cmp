@@ -47,7 +47,7 @@
       <div class="slds-p-horizontal_small table-wrapper" style="{!'min-height:80px;max-height:'+v.height+'px;'}">
 
         <aura:if isTrue="{!v.isLoading}">
-          <div class="spinner-container"><lightning:spinner size="large" variant="brand"/></div>
+            <div class="spinner-container"><lightning:spinner size="large" variant="brand"/></div>
         </aura:if>
 
         <table class="datalist">
@@ -92,7 +92,14 @@
                           />
                         </aura:if>
                         <aura:if isTrue="{! field.type == 'textarea'}">
-                          <lightning:textarea name="{!index}" label="" variant="label-hidden" value="{!field.value}" rows="2" onchange="{!c.inputChange}" />
+                          <lightning:textarea
+                            name="{!index}"
+                            label=""
+                            variant="label-hidden"
+                            value="{!field.value}"
+                            rows="2"
+                            onchange="{!c.inputChange}"
+                          />
                         </aura:if>
                         <aura:if isTrue="{! !(field.type == 'picklist' || field.type == 'reference' || field.type == 'textarea') }">
                           <lightning:input
@@ -128,6 +135,7 @@
         </div>
       </aura:if>
       <!-- /Empty Message -->
+
     </lightning:card>
   </div>
 </aura:component>
