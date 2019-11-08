@@ -30,6 +30,7 @@ public with sharing  class EditableDataTableController {
         try {
             List<Sobject> ret = new List<Sobject>();
             List<Field> fields = (List<Field>)JSON.deserialize(fieldsJson, List<Field>.class);
+            recordIdsJson = String.escapeSingleQuotes(recordIdsJson);
             List<String> recordIds = (List<String>)JSON.deserialize(recordIdsJson, List<String>.class);
 
             String query = 'SELECT Id';
@@ -51,7 +52,7 @@ public with sharing  class EditableDataTableController {
             if (recordTypes.size() > 0) {
                 query += ', RecordTypeId';
             }
-            query += ' FROM ' + objectName + ' WHERE Id IN (\'' + String.join(recordIds, '\',\'') + '\') LIMIT ' + rowsLimit;
+            query += ' FROM ' + String.escapeSingleQuotes(objectName) + ' WHERE Id IN (\'' + String.join(recordIds, '\',\'') + '\') LIMIT ' + String.escapeSingleQuotes(rowsLimit);
             System.debug(query);
             ret = Database.query(query);
             return ret;
