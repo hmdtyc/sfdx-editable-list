@@ -44,7 +44,8 @@
         <ui:message title="Error" severity="error" closable="false">{!v.errorMessage}</ui:message>
       </aura:if>
 
-      <div class="slds-p-horizontal_small table-wrapper" style="{!'min-height:120px;max-height:'+v.height+'px;'}">
+      <div class="slds-p-horizontal_small table-wrapper" style="{!'min-height:80px;max-height:'+v.height+'px;'}">
+
         <aura:if isTrue="{!v.isLoading}">
           <div class="spinner-container"><lightning:spinner size="large" variant="brand"/></div>
         </aura:if>
