@@ -37,6 +37,7 @@ public with sharing  class EditableDataTableController {
             for (Field field : fields) {
                 System.debug(field.name);
                 if ((field.name.toLowerCase() != 'id')
+                    && Schema.getGlobalDescribe().get(field.objectName).getDescribe().isAccessible()
                     && Schema.getGlobalDescribe().get(field.objectName).getDescribe().isUpdateable()
                     && Schema.getGlobalDescribe().get(field.objectName).getDescribe().fields.getMap().get(field.name).getDescribe().isUpdateable()) {
                     if (field.type.toUpperCase() == 'REFERENCE') {
