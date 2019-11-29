@@ -129,7 +129,7 @@
         c.set("v.isLoading", false);
       })
       .catch(function(reject) {
-        console.error(reject);
+        h.showError(c, h, reject);
       })
       .then(
         $A.getCallback(function() {

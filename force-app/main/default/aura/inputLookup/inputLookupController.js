@@ -35,9 +35,9 @@
                 c.set("v.searchResult", searchResult);
               })
             )
-            .catch(function(reason) {
-              h.showError(c, h, "controller.initColumns : " + reason);
-            });
+            .catch($A.getCallback(function(reason) {
+              h.showError(c, "inputLookup.inputChange : " + reason);
+            }));
         }),
         500
       )
