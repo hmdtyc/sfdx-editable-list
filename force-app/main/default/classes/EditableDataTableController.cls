@@ -37,9 +37,7 @@ public with sharing  class EditableDataTableController {
             for (Field field : fields) {
                 System.debug(field.name);
                 if ((field.name.toLowerCase() != 'id')
-                    && Schema.getGlobalDescribe().get(field.objectName).getDescribe().isAccessible()
-                    && Schema.getGlobalDescribe().get(field.objectName).getDescribe().isUpdateable()
-                    && Schema.getGlobalDescribe().get(field.objectName).getDescribe().fields.getMap().get(field.name).getDescribe().isUpdateable()) {
+                    && field.isObjectAccessible && field.isObjectUpdateable && field.isAccessible && field.isUpdateable) {
                     if (field.type.toUpperCase() == 'REFERENCE') {
                         query += ',' + field.name + ',' + field.referenceRelationshipName + '.' + field.referenceNameField;
                     }
@@ -78,10 +76,14 @@ public with sharing  class EditableDataTableController {
     }
     @AuraEnabled
     public static string search(String objectName, String nameField, String keyword){
-        if (isUnsafeStringForSearch(objectName) || isUnsafeStringForSearch(nameField) || isUnsafeStringForSearch(keyword)) {
-            return JSON.serialize(new Error('Following Letters are not not supported: ?&|!{}[]()^~*:\\+-'));
-        }
         try {
+            Field field = new Field(objectName, nameField);
+            if (!field.isObjectAccessible || !field.isAccessible) {
+                throw new EditableDataTableControllerException(nameField + ' field of ' + objectName + ' is not accessbile');
+            }
+            if (isUnsafeStringForSearch(objectName) || isUnsafeStringForSearch(nameField) || isUnsafeStringForSearch(keyword)) {
+                throw new EditableDataTableControllerException('Following Letters are not not supported: ?&|!{}[]()^~*:\\+-');
+            }
             String searchquery = 'FIND \'' + String.escapeSingleQuotes(keyword) + '\' IN ALL FIELDS RETURNING ' + String.escapeSingleQuotes(objectName) + '(id, ' + String.escapeSingleQuotes(nameField) + ')';
             //System.debug(searchquery);
             List<List<SObject>> result = search.query(searchquery);
@@ -97,6 +99,17 @@ public with sharing  class EditableDataTableController {
     public static string saveRecords(String recordsJson, String sObjectName){
         try{
             List<SObject> records = (List<SObject>) JSON.deserialize(recordsJson, Type.forName('List<' + sObjectName + '>'));
+            Set<String> fieldList = new Set<String>();
+            for (SObject record : records) {
+                fieldList.addAll(new List<String>(record.getPopulatedFieldsAsMap().keySet()));
+            }
+            for (String fieldName : fieldList) {
+                Field field = new Field(sObjectName, fieldName);
+                if ((field.name.toLowerCase() != 'id')
+                    && (!field.isObjectAccessible || !field.isObjectUpdateable || !field.isAccessible || !field.isUpdateable)) {
+                    throw new EditableDataTableControllerException(fieldName + ' field of ' + sObjectName + ' is not either accessbile or updateable');
+                }
+            }
             List<Database.UpsertResult> upsertResults = Database.upsert(records, false);
             List<SaveResult> saveResultsForJson = new List<SaveResult>();
             for(Database.UpsertResult res : upsertResults) {

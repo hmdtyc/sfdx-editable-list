@@ -13,6 +13,8 @@ public class Field {
     @AuraEnabled public String referenceRelationshipName;
     @AuraEnabled public String referenceNameField;
 
+    @AuraEnabled public Boolean isObjectAccessible;
+    @AuraEnabled public Boolean isObjectUpdateable;
     @AuraEnabled public Boolean isNameField;
     @AuraEnabled public Boolean isFilterable;
     @AuraEnabled public Boolean isAccessible;
@@ -37,6 +39,8 @@ public class Field {
         this.type = null;
         this.isNameField = false;
         this.scale = 0;
+        this.isObjectAccessible = false;
+        this.isObjectUpdateable = false;
         this.isFilterable = false;
         this.isAccessible = false;
         this.isUpdateable = false;
@@ -53,6 +57,8 @@ public class Field {
     private void init(String objectName, String fieldName) {
         this.objectName = getObjectName(objectName);
         this.objectLabel = getObjectLabel(objectName);
+        this.isObjectAccessible = isObjectAccessible(objectName);
+        this.isObjectUpdateable = isObjectUpdateable(objectName);
         this.name = getFieldName(objectName, fieldName);
         this.Label = getFieldLabel(objectName, fieldName);
         this.type = getFieldType(objectName, fieldName).name();
@@ -92,6 +98,12 @@ public class Field {
     }
     private String getObjectLabel(String objectName) {
         return Schema.getGlobalDescribe().get(objectName).getDescribe().getLabel();
+    }
+    private Boolean isObjectAccessible(String objectName) {
+        return Schema.getGlobalDescribe().get(objectName).getDescribe().isAccessible();
+    }
+    private Boolean isObjectUpdateable(String objectName) {
+        return Schema.getGlobalDescribe().get(objectName).getDescribe().isUpdateable();
     }
     private Boolean isNameField(String objectName, String fieldName){
         return Schema.getGlobalDescribe().get(objectName).getDescribe().fields.getMap().get(fieldName).getDescribe().isNameField();

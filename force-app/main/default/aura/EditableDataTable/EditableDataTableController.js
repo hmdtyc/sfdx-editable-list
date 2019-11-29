@@ -31,7 +31,7 @@
               else return width.trim();
             });
           fields = fields.filter(function(field, index) {
-            if (!field || !field.isUpdateable) return false;
+            if (!field || !field.isAccessible || !field.isUpdateable) return false;
             else if (
               field.type === "ADDRESS" ||
               field.type === "ANYTYPE" ||
