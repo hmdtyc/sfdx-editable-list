@@ -145,7 +145,7 @@ public class Test_EditableDataTableController {
         String result = EditableDataTableController.search('InvalidObjectName', 'Name', testAccountName);
         EditableDataTableController.Error error = (EditableDataTableController.Error) JSON.deserialize(result, EditableDataTableController.Error.class);
         System.assertEquals(true, error.hasError);
-        System.assertEquals(true, error.message.contains('sObject type \'invalidobjectname\' is not supported.'));
+        System.assertEquals(true, error.message.contains('\'InvalidObjectName\' is not valid object type'));
         Test.stopTest();
     }
     static testMethod void search_InvalidNameField() {
@@ -157,7 +157,7 @@ public class Test_EditableDataTableController {
         String result = EditableDataTableController.search('Account', 'InvalidNameField', testAccountName);
         EditableDataTableController.Error error = (EditableDataTableController.Error) JSON.deserialize(result, EditableDataTableController.Error.class);
         System.assertEquals(true, error.hasError);
-        System.assertEquals(true, error.message.contains('No such column \'InvalidNameField\' on entity \'Account\''));
+        System.assertEquals(true, error.message.contains('\'InvalidNameField\' of \'Account\' is not a valid field'));
         Test.stopTest();
     }
 }
