@@ -24,9 +24,9 @@ public with sharing  class EditableDataTableController {
     }
     @AuraEnabled
     public static Object getRecords(String objectName, String fieldsJson, String recordIdsJson, String rowsLimit) {
-        System.debug(objectName);
-        System.debug(fieldsJson);
-        System.debug(recordIdsJson);
+        // System.debug(objectName);
+        // System.debug(fieldsJson);
+        // System.debug(recordIdsJson);
         try {
             List<Sobject> ret = new List<Sobject>();
             List<Field> fields = (List<Field>)JSON.deserialize(fieldsJson, List<Field>.class);
@@ -35,7 +35,7 @@ public with sharing  class EditableDataTableController {
 
             String query = 'SELECT Id';
             for (Field field : fields) {
-                System.debug(field.name);
+                // System.debug(field.name);
                 if ((field.name.toLowerCase() != 'id')
                     && field.isObjectAccessible && field.isObjectUpdateable && field.isAccessible && field.isUpdateable) {
                     if (field.type.toUpperCase() == 'REFERENCE') {
@@ -52,7 +52,7 @@ public with sharing  class EditableDataTableController {
                 query += ', RecordTypeId';
             }
             query += ' FROM ' + String.escapeSingleQuotes(objectName) + ' WHERE Id IN (\'' + String.join(recordIds, '\',\'') + '\') LIMIT ' + String.escapeSingleQuotes(rowsLimit);
-            System.debug(query);
+            // System.debug(query);
             ret = Database.query(query);
             return ret;
         } catch (Exception e) {
@@ -85,7 +85,7 @@ public with sharing  class EditableDataTableController {
                 throw new EditableDataTableControllerException('Following Letters are not not supported: ?&|!{}[]()^~*:\\+-');
             }
             String searchquery = 'FIND \'' + String.escapeSingleQuotes(keyword) + '\' IN ALL FIELDS RETURNING ' + String.escapeSingleQuotes(objectName) + '(id, ' + String.escapeSingleQuotes(nameField) + ')';
-            //System.debug(searchquery);
+            // System.debug(searchquery);
             List<List<SObject>> result = search.query(searchquery);
             return JSON.serialize(result);
         } catch (Exception e) {
