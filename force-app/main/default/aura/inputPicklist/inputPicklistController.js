@@ -3,6 +3,7 @@
     c.set("v.previousValue", c.get("v.value"));
   },
   setValues: function(c, e, h) {
+    if (c.get("v.options").length > 0) return;
     const fieldName = c.get("v.fieldName");
     const obj = e.getParam("data")["picklistFieldValues"][fieldName];
     let values = obj.values;
