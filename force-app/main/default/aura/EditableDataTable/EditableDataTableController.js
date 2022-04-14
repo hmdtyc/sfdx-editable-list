@@ -14,8 +14,8 @@
             fieldNames.push(fieldName);
           }
         });
-    } catch (e) {
-      h.showError(c, h, e.message);
+    } catch (err) {
+      h.showError(c, h, err.message);
       return;
     }
     if (fieldNames.length === 1 && !fieldNames[0]) fieldNames.shift();
@@ -57,6 +57,7 @@
         })
       )
       .catch(function(reason) {
+        console.error("[ERROR]controller.initColumns :", reason);
         h.showError(c, h, "controller.initColumns : " + reason);
       });
   },
@@ -129,6 +130,7 @@
         c.set("v.isLoading", false);
       })
       .catch(function(reject) {
+        console.error("[ERROR]controller.saveRecords :", reject);
         h.showError(c, h, reject);
       })
       .then(
@@ -159,8 +161,8 @@
             field.referenceDispalyValue = undefined;
             field.value = undefined;
           }
-        } catch (e) {
-          console.error(e);
+        } catch (ex) {
+          console.error(ex);
         }
       }
       field.errors = "";
