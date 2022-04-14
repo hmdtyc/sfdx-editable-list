@@ -123,8 +123,18 @@
     return new Promise(function(resolve, reject) {
       action.setCallback(this, function(response) {
         const ret = response.getReturnValue();
-        if (response.getState() === "SUCCESS") ret.hasError ? reject(ret.message) : resolve(ret);
-        else if (response.getState() === "ERROR") reject(response.getError());
+        if (response.getState() === "SUCCESS") {
+          ret.hasError ? reject(ret.message) : resolve(ret);
+        } else if (response.getState() === "ERROR") {
+          let errors = response.getError();
+          if (errors && errors[0] && errors[0].message) {
+            reject(errors[0].message);
+          } else if (errors && errors[0] && errors[0].pageErrors) {
+            reject(errors[0].pageErrors);
+          } else {
+            reject(errors);
+          }
+        }
       });
       $A.enqueueAction(action);
     });
@@ -140,8 +150,18 @@
     return new Promise(function(resolve, reject) {
       action.setCallback(this, function(response) {
         const ret = response.getReturnValue();
-        if (response.getState() === "SUCCESS") ret.hasError ? reject(ret.message) : resolve(ret);
-        else if (response.getState() === "ERROR") reject("errorr");
+        if (response.getState() === "SUCCESS") {
+          ret.hasError ? reject(ret.message) : resolve(ret);
+        } else if (response.getState() === "ERROR") {
+          let errors = response.getError();
+          if (errors && errors[0] && errors[0].message) {
+            reject(errors[0].message);
+          } else if (errors && errors[0] && errors[0].pageErrors) {
+            reject(errors[0].pageErrors);
+          } else {
+            reject(errors);
+          }
+        }
       });
       $A.enqueueAction(action);
     });
@@ -179,8 +199,18 @@
         const ret = JSON.parse(response.getReturnValue());
         // console.log("=====RETURN VALUE======");
         // console.log(ret);
-        if (response.getState() === "SUCCESS") ret.hasError ? reject(ret.message) : resolve(ret);
-        else if (response.getState() === "ERROR") reject(response.getError());
+        if (response.getState() === "SUCCESS") {
+          ret.hasError ? reject(ret.message) : resolve(ret);
+        } else if (response.getState() === "ERROR") {
+          let errors = response.getError();
+          if (errors && errors[0] && errors[0].message) {
+            reject(errors[0].message);
+          } else if (errors && errors[0] && errors[0].pageErrors) {
+            reject(errors[0].pageErrors);
+          } else {
+            reject(errors);
+          }
+        }
       });
       $A.enqueueAction(action);
     });
